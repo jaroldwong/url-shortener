@@ -1,0 +1,22 @@
+{
+  "name": "url-shortener",
+  "version": "1.0.0",
+  "description": "freeCodeCamp project",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaroldwong/url-shortener.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jaroldwong/url-shortener/issues"
+  },
+  "homepage": "https://github.com/jaroldwong/url-shortener#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
