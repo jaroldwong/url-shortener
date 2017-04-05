@@ -1,10 +1,7 @@
 var express = require('express');
 var app = express();
 
-var urlStore = {
-  "0": "http://google.com",
-  "1": "http://youtube.com"
-};
+var urlStore = ["http://google.com", "http://youtube.com"];
 
 app.get('/', function (req, res) {
   res.send('URL Shortener');
@@ -18,10 +15,11 @@ app.get('/:id', function (req, res) {
 // When I visit that shortened URL, it will redirect me to my original link.
 app.get('/*', function (req, res) {
   var url = req.params[0];
-  var shurl = req.hostname;
-  
+  urlStore.push(url);
+
+  var shurl = req.protocol + '://' + req.hostname + '/' + (urlStore.length - 1);
+
   // if invalid URL, return error
-  
   var data = {
     "original_url": url,
     "short_url": shurl
