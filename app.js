@@ -1,8 +1,17 @@
 var express = require('express');
 var app = express();
 
+var urlStore = {
+  "0": "http://google.com",
+  "1": "http://youtube.com"
+};
+
 app.get('/', function (req, res) {
   res.send('URL Shortener');
+});
+
+app.get('/:id', function (req, res) {
+  res.redirect(urlStore[req.params.id]);
 });
 
 // I can pass a URL as a parameter and I will receive a shortened URL in the JSON response.
