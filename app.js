@@ -1,35 +1,58 @@
 var express = require('express');
+var mongoose = require('mongoose');
 var app = express();
 
-var urlStore = ["http://google.com", "http://youtube.com"];
+// db setup
+var uri = process.env.MONGOURI;
+mongoose.connect(uri);
+
+// define schema and create model
+var linkSchema = new mongoose.Schema({urls: []});
+var Link = mongoose.model('link', linkSchema);
 
 app.get('/', function (req, res) {
   res.send('URL Shortener');
 });
 
 app.get('/:id', function (req, res) {
-  res.redirect(urlStore[req.params.id]);
+  Link.findOne({}, function (err, links) {
+    if (err) return console.error(err);
+
+    res.redirect(links.urls[req.params.id]);
+  })
 });
 
-// I can pass a URL as a parameter and I will receive a shortened URL in the JSON response.
-// When I visit that shortened URL, it will redirect me to my original link.
 app.get('/*', function (req, res) {
   var url = req.params[0];
-  urlStore.push(url);
 
-  var shurl = req.protocol + '://' + req.hostname + '/' + (urlStore.length - 1);
+  // store url in db document
+  Link.findOne(function (err, links) {
+    if (err) return console.error(err);
 
-  // if invalid URL, return error
-  var data = {
-    "original_url": url,
-    "short_url": shurl
-  };
+    links.urls.push(url);
+    var len = links.urls.length;
+    var shurl = req.protocol + '://' + req.hostname + '/' + (len- 1);
 
-  var error = {
-    "error": "URL invalid"
-  };
-  
-  res.send(JSON.stringify(data));
+    // if invalid URL, return error
+    var data = {
+      "original_url": url,
+      "short_url": shurl
+    };
+
+    var error = {
+      "error": "URL invalid"
+    };
+    
+    res.send(JSON.stringify(data));
+
+    links.save(function(err) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('Successful save');
+        }
+      });
+  });
 });
 
 app.listen(3000, function () {
