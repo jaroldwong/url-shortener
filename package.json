@@ -18,6 +18,7 @@
   "homepage": "https://github.com/jaroldwong/url-shortener#readme",
   "dependencies": {
     "express": "^4.15.2",
+    "is-url": "^1.2.2",
     "mongoose": "^4.9.3"
   }
 }
