@@ -3,6 +3,8 @@ var mongoose = require('mongoose');
 var isUrl = require('is-url');
 var app = express();
 
+app.use(express.static(__dirname + '/views'));
+
 // db setup
 var uri = process.env.MONGOURI;
 mongoose.connect(uri);
@@ -14,7 +16,7 @@ var linkSchema = new mongoose.Schema({
 var Link = mongoose.model('link', linkSchema);
 
 app.get('/', function(req, res) {
-  res.send('URL Shortener');
+  res.render('index');
 });
 
 app.get('/:id', function(req, res) {
